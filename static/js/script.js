@@ -20,4 +20,5 @@ if(_("inputPath").textContent!=='')
     _("photo").classList.remove("d-none");
 };
 
+
 // _("xraying").onchange = inputImage;

@@ -1,0 +1,187 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+<!-- Required meta tags -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!-- Bootstrap CSS -->
+<link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+      />
+<script
+        src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.25.0/axios.min.js"
+        integrity="sha512-/Q6t3CASm04EliI1QyIDAA/nDo9R8FQ/BULoUFyN4n/BDdyIxeH7u++Z+eobdmr11gG5D/6nPFyDlnisDwhpYA=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+        ></script>
+
+
+<title>Covid Classifier</title>
+  </head>
+  <body class="bg-secondary">
+<div class="container-xxl">
+  <div class="row text-center">
+    <h1 class="text-white">Covid-19 Detection System using Machine Learning</h1>
+    <div id="elebtn" style="display: flex;">
+      <a class="btn btn-primary" href="/" role="button" style="margin: 1%;">HOG</a>
+      <a class="btn btn-primary" href="/dl" role="button" style="margin: 1%;">DL_Pred</a>
+    </div>
+  </div>
+  <form action="/ml" method="post" enctype="multipart/form-data">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-header text-center">Options</div>
+        <div class="card-body text-center">
+          <div class="my-3 text-center">
+            <label class="btn btn-primary w-75" for="xrayimg"
+                   >Upload Input Image</label
+              >
+            <input
+                   type="file"
+                   id="xrayimg"
+                   accept="image/*"
+                   name="input-image"
+                   style="display: none"
+                   onchange="showPreview(event)"
+                   />
+          </div>
+          <div class="my-3 text-center"
+          style="
+    display: grid;
+    width: 100%;
+    padding: 1% 5%;
+    /* margin: -5px 0; */
+">
+            <input type="submit" class="ml_submit btn" name="action" value="SVM" style="margin: 20px; background-color: #82d2ee;">
+            <input type="submit" class="ml_submit btn" name="action" value="Random Forest" style="margin: 20px;background-color: #82d2ee;">
+            <input type="submit" class="ml_submit btn" name="action" value="XG Boost" style="margin: 20px;background-color: #82d2ee;">
+            <input type="submit" class="ml_submit btn btn-primary" name="action" value="LIME XAI-SVM" style="margin: 20px; ">
+            <input type="submit" class="ml_submit btn btn-primary" name="action" value="LIME XAI-Random Forest" style="margin: 20px;">
+            <input type="submit" class="ml_submit btn btn-primary" name="action" value="LIME XAI-XG Boost" style="margin: 20px;">
+          
+
+
+          </div>
+<!-- <div class="d-none">
+          <div class="my-3 text-center">
+
+           <button
+                    onclick="postImage()"
+                    id="tclassi"
+                    class="w-75 btn btn-primary disabled"
+                    >
+              Random Forest
+            </button>
+          </div>
+
+          <div class="my-3 text-center">
+
+          <button
+                    onclick="postImage()"
+                    id="tclassi"
+                    class="w-75 btn btn-primary disabled"
+                    >
+              XG Boost
+            </button> 
+          </div>
+
+</div> -->
+<div class="d-none">
+          <div class="my-3 row text-center">
+            <div class="col-lg-6">
+
+            </div>
+            <div class="col-lg-5 pt-1">
+              <p class="Classification"></p>
+            </div>
+          </div>
+          <div class="my-3 text-center">
+            <button class="btn w-75 btn-primary disabled">
+              LIME XAI-SVM
+            </button>
+          </div>
+
+          <div class="my-3 text-center">
+            <button class="btn w-75 btn-primary disabled">
+              LIME XAI-Random Forest
+            </button>
+          </div>
+
+          <div class="my-3 text-center">
+            <button class="btn w-75 btn-primary disabled">
+              LIME XAI- XG Boost
+            </button>
+          </div>
+
+          <div class="my-3 text-center">
+            <button
+                    class="btn btn-danger w-75"
+                    onclick="window.location.reload()"
+                    type="reset"
+                    >
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    <div class="card col-md-4 mx-auto">
+      <div class="card-header text-center">Input Chest X-Ray Image</div>
+      <div class="row h-100 justify-content-center align-items-center">
+        <div id="prob">
+          {{ prediction_proba }}
+          {{ prediction_text }}
+        </div>
+        <p id="inputPath" class="d-none">{{ input_path }}</p>
+
+        <img src="../static/images/ml/{{ input_path }}"  id="imageshow"
+        class="align-self-center d-none"
+        height="70%"
+        width="300px"
+        style="aspect-ratio: unset; box-sizing: content-box"
+        >
+      </div>
+    </div>
+    <div class="card col-md-4 mx-auto">
+      <div class="card-header text-center">LIME XAI Image</div>
+      <div class="row h-100 justify-content-center align-items-center">
+        <p id="limePath" class="d-none">{{ lime_path }}</p>
+          
+        <img
+             id="photo"
+             src="{{ lime_path }}"
+             class="align-self-center d-none"
+             height="70%"
+             width="100%"
+             style="aspect-ratio: unset; box-sizing: content-box"
+             />
+      </div>
+    </div>
+  </div>
+  </form>
+</div>
+
+
+
+<script src="../static/js/script_ml.js"></script>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"
+        ></script>
+
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"
+        ></script>
+  </body>
+</html>
