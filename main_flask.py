@@ -27,6 +27,7 @@ from lime.wrappers.scikit_image import SegmentationAlgorithm
 from werkzeug.utils import secure_filename
 from os.path import join, dirname, realpath
 from hog_capture import *
+# from dl_model_out import *
 
 import os,sys
 try:
@@ -59,6 +60,8 @@ app = Flask(__name__)
 UPLOADS_PATH = join(dirname(realpath(__file__)), 'static\\images\\upload')
 UPLOADS_ML = join(dirname(realpath(__file__)), 'static\\images\\ML')
 UPLOADS_DL = join(dirname(realpath(__file__)), 'static\\images\\DL')
+UPLOADS_DL_LIME = join(dirname(realpath(__file__)), 'static\\images\\Lime_DL')
+IMG_TEST_PATH=os.path.join(UPLOADS_DL_LIME,'test/')
 
 @app.route('/',methods=['GET','POST'])
 def hog():
@@ -127,6 +130,8 @@ def ml_pred():
 @app.route('/dl',methods=['GET','POST'])
 def dl_pred():
     global input_file_dl
+    global prediction_text
+    global input_path
     lime_path = "../static/images/Lime/Lime image showing positive regions.png"
     print('dl page')
     if request.method == 'POST':
@@ -140,8 +145,25 @@ def dl_pred():
                 print(e)
             print(input_file_dl)
             print('Exception Net')
-            prediction_proba = "0.5"
-            prediction_text = "prediction Exception net"
+            '''
+            x=Image.open(IMG_TEST_PATH+input_file_dl) 
+            image_tensor = test_transforms(x)
+            image_tensor = image_tensor.unsqueeze_(0)
+            input = Variable(image_tensor)
+            input = input.to(device) # to be used as input image
+            output = model(input)
+            index = output.data.cpu().numpy().argmax() # Gives you the output label
+            print("label : ", index)
+            if(label == 0):
+                res = "COVID Negative"
+            else:
+                res = "COVID Positive"
+            '''
+            res = "COVID Negative"
+            # prediction_proba = "0.5"
+            # prediction_text = "prediction Exception net"
+            prediction_text = "The image is classified as {} by EfficientNet Classifier.".format(res)
+            return(render_template("projectDL.html", input_path =input_file_dl, prediction_text = prediction_text))
         if request.form['action'] == 'LIME XAI':
             if request.files['input-image']:
                 print('image path needed')
@@ -153,16 +175,20 @@ def dl_pred():
                 except Exception as e:
                     print(e)
                 print(input_file_dl)
-                print('Exception Net')
-                prediction_proba = "0.5"
-                prediction_text = "prediction LIME IM"
+                print(input_path)
+                print('Lime-XAI')
+                # explanation = get_explanation(input_path)
+                # get_lime_image1(explanation)
+                # get_lime_image2(explanation)
+                # prediction_proba = "0.5"
+                # prediction_text = "prediction LIME IM"
+                res = "COVID Positive"
             else:
                 print("No imagpath needed")
-                prediction_proba = "0.6"
-                prediction_text = "prediction lIME"
-            return(render_template("projectDL.html", input_path =input_file_dl, lime_path=lime_path))
-
-        return(render_template("projectDL.html", prediction_proba=prediction_proba, prediction_text=prediction_text, input_path =input_file_dl))
+                # prediction_proba = "0.6"
+                # prediction_text = "prediction lIME"
+                res = "COVID Negative"
+            return(render_template("projectDL.html", input_path =input_file_dl, lime_path=lime_path, prediction_text=prediction_text))
     return render_template("projectDL.html")
 
 ##Included new till here

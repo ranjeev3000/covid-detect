@@ -85,15 +85,15 @@
   <div class="card-header text-center">Input Chest X-Ray Image</div>
   <div class="row h-100 justify-content-center align-items-center">
     <div id="prob">
-      {{ prediction_proba }}
-      {{ prediction_text }}
+      <p class="font-weight-bold text-primary"> {{ prediction_text }}</p>
+     
     </div>
     <p id="inputPath" class="d-none">{{ input_path }}</p>
     <img
       id="imageshow"
       src="../static/images/dl/{{ input_path }}"
       class="align-self-center d-none"
-      height="70%"
+      height="85%"
       width="300px"
       style="aspect-ratio: unset; box-sizing: content-box"
     />
@@ -104,14 +104,24 @@
   <div class="row h-100 justify-content-center align-items-center">
     <p id="limePath" class="d-none">{{ lime_path }}</p>
           
-    <img
-         id="photo"
-         src="{{ lime_path }}"
-         class="align-self-center d-none"
-         height="70%"
-         width="100%"
-         style="aspect-ratio: unset; box-sizing: content-box"
-         />
+    <div id="limedl">
+      <img
+           id="photo"
+           src="../static/images/Lime_DL/image_positive.png"
+           class="align-self-center d-none"
+           height="70%"
+           width="100%"
+           style="aspect-ratio: unset; box-sizing: content-box"
+           />
+      <img
+           id="photo_neg"
+           src="../static/images/Lime_DL/image_negative.png"
+           class="align-self-center d-none"
+           height="70%"
+           width="100%"
+           style="aspect-ratio: unset; box-sizing: content-box"
+           />
+          </div> 
   </div>
 </div>
   </div>

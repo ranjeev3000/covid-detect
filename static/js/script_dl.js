@@ -30,4 +30,5 @@ if(_("inputPath").textContent!=='')
 if(_("limePath").textContent!=='')
 {
     _("photo").classList.remove("d-none");
+    _("photo_neg").classList.remove("d-none");
 };
